@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+		<link rel="stylesheet" type="text/css" href="../js/easyui/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../js/easyui/themes/icon.css">
+		<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+		<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+
+</head>
+<body class="easyui-layout">
+<h2>Basic Layout</h2>
+	<p>The layout contains north,south,west,east and center regions.</p>
+	
+	
+		<div data-options="region:'north'" style="height:50px"></div>
+		<div data-options="region:'south',split:true" style="height:50px;"></div>
+		<div data-options="region:'east',split:true" title="East" style="width:100px;"></div>
+		<div data-options="region:'west',split:true" title="West" style="width:100px;"></div>
+		<div data-options="region:'center',title:'主题内容',iconCls:'icon-ok'">
+			<!-- <table class="easyui-datagrid"
+					data-options="url:'datagrid_data1.json',method:'get',border:false,singleSelect:true,fit:true,fitColumns:true">
+				
+			</table> -->
+		</div>
+	
+
+</body>
+</html>
