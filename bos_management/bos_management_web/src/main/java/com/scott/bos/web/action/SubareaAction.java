@@ -11,6 +11,7 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
+import org.apache.struts2.convention.annotation.Result;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,11 +42,11 @@ public class SubareaAction extends CommonAction<SubArea> {
         super(SubArea.class);  
               
     }
-    @Action("subareaAction_save")
+    @Action(value="subareaAction_save",results={@Result(name="success",type="redirect",location="/pages/base/sub_area.html")} )
     public String save(){
         subareaService.save(model);
-        //System.out.println(model.toString());
-        return null;
+       
+        return SUCCESS;
     }
     private int page;
     private int rows;

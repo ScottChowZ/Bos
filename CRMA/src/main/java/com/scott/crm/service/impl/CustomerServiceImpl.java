@@ -1,0 +1,37 @@
+package com.scott.crm.service.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.scott.crm.dao.CustomerDAO;
+import com.scott.crm.domain.Customer;
+import com.scott.crm.service.CustomerService;
+
+/**  
+ * ClassName:CustomerServiceImpl <br/>  
+ * Function:  <br/>  
+ * Date:     2018年3月18日 下午5:48:06 <br/>       
+ */
+@Service("customerServiceImpl")
+public class CustomerServiceImpl implements CustomerService{
+    @Resource(name="customerDao")
+    private CustomerDAO customerDao;
+    @Override
+    public List<Customer> findByFixedAreaIdIsNull() {
+          
+      
+        return customerDao.findByFixedAreaIdIsNull();
+    }
+    @Override
+    public List<Customer> findByFixedAreaIdIsNotNull() {
+          
+         
+        return customerDao.findByFixedAreaIdIsNotNull();
+    }
+
+    
+}
+  

@@ -32,7 +32,36 @@
 			}
 			
 			function doAssociations(){
-				$('#customerWindow').window('open');
+
+			    var selects = $("#grid").datagrid("getSelections")
+			    
+			    if(selects.length==1){
+			    	$("#noassociationSelect").html("")
+			    	$("#associationSelect").html("")
+			    	$.post("../../fixedAreaAction_findCustomersNotAssociated.action",function(result){
+			    		for (var i = 0; i < result.length; i++) {
+			    			$("#noassociationSelect").append(
+	                                "<option value='"+result[i].id+"'>"
+	                                                + result[i].username + "["
+	                                                + result[i].telephone + "]"
+	                                                + "</option>")
+						}
+			    	})
+			    	$.post("../../fixedAreaAction_findCustomersAssociated.action",function(result){
+			    		for (var i = 0; i < result.length; i++) {
+			    			$("#associationSelect").append(
+	                                "<option value='"+result[i].id+"'>"
+	                                                + result[i].username + "["
+	                                                + result[i].telephone + "]"
+	                                                + "</option>")
+						}
+			    	})
+			    	$('#customerWindow').window('open');
+			    }else{
+			    	alert("只能选择一个定区关联");
+			    }
+				
+				
 			}
 			
 			//工具栏
@@ -126,7 +155,7 @@
 					pageList: [30,50,100],
 					pagination : true,
 					toolbar : toolbar,
-					url : "../../fixedAreaAction_pageQuery.action",
+					url : "../../data/fixedarea_subarea.json",
 					idField : 'id',
 					columns : columns,
 					onDblClickRow : doDblClickRow
@@ -257,6 +286,17 @@
 				});
 				
 			}
+			function areaSave(){
+				$("#fixedAreaForm").submit();
+			}
+			function movetoRight(){
+				alert("左向右")
+			$("#associationSelect").append($("#noassociationSelect option:selected"))
+			 
+			}
+			function movetoLeft(){
+				
+			}
 		</script>
 	</head>
 
@@ -279,7 +319,7 @@
 		<div class="easyui-window" title="定区添加修改" id="addWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 			<div style="height:31px;overflow:hidden;" split="false" border="false">
 				<div class="datagrid-toolbar">
-					<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true">保存</a>
+					<a id="save" icon="icon-save" href="javaScript:areaSave()" class="easyui-linkbutton" plain="true">保存</a>
 					</script>
 				</div>
 			</div>
@@ -291,8 +331,8 @@
 							<td colspan="2">定区信息</td>
 						</tr>
 						<tr>
-							<td>定区编码</td>
-							<td><input type="text" name="id" class="easyui-validatebox"
+							
+							<td><input type="hidden" name="id" class="easyui-validatebox"
 								required="true" /></td>
 						</tr>
 						<tr>
@@ -364,12 +404,14 @@
 						<tr>
 							<td>
 								<input type="hidden" name="id" id="customerFixedAreaId" />
-								<select id="noassociationSelect" multiple="multiple" size="10"></select>
+								<select id="noassociationSelect" multiple="multiple" size="10">
+								
+								</select>
 							</td>
 							<td>
-								<input type="button" value="》》" id="toRight">
+								<input type="button" value="》》" id="toRight" onclick="movetoRight()">
 								<br/>
-								<input type="button" value="《《" id="toLeft">
+								<input type="button" value="《《" id="toLeft" onclick="movetoLeft()">
 							</td>
 							<td>
 								<select id="associationSelect" name="customerIds" multiple="multiple" size="10"></select>
@@ -398,7 +440,7 @@
 							<td>
 								<!-- 存放定区编号 -->
 								<input type="hidden" name="id" id="courierFixedAreaId" />
-								<input data-options="ditable:false, url:'../../courierAction_listajax.action',valueField:'id',textField:'name'"
+								<input data-options="ditable:false, url:'../../data/fixed_ared.json',valueField:'id',textField:'name'"
 									 type="text" name="courierId" class="easyui-combobox" required="true" />
 							</td>
 						</tr>
