@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.scott.crm.dao.CustomerDAO;
 import com.scott.crm.domain.Customer;
@@ -30,6 +31,20 @@ public class CustomerServiceImpl implements CustomerService{
           
          
         return customerDao.findByFixedAreaIdIsNotNull();
+    }
+    @Transactional
+    @Override
+    public void save(Long[] id, String fixedAreaId) {
+          customerDao.relive(fixedAreaId);
+          System.out.println("w");
+         
+         
+        for(int i=0;i<id.length;i++){
+            System.out.println("e");
+            customerDao.relevance(id[i],fixedAreaId);
+                    
+        }
+        
     }
 
     

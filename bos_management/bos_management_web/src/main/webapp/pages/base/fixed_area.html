@@ -290,11 +290,23 @@
 				$("#fixedAreaForm").submit();
 			}
 			function movetoRight(){
-				alert("左向右")
+				
 			$("#associationSelect").append($("#noassociationSelect option:selected"))
 			 
 			}
 			function movetoLeft(){
+				
+			$("#noassociationSelect").append($("#associationSelect option:selected"))
+			}
+			function customerSave(){
+				$("#associationSelect option").attr("selected","selected");
+				 var s=$("#associationSelect").val();
+				
+				
+				var rows = $("#grid").datagrid('getSelections');
+				$("#customerFixedAreaId").val(rows[0].id)
+				$("#customerForm").submit();
+				 
 				
 			}
 		</script>
@@ -396,7 +408,7 @@
 		<!-- 关联客户窗口 -->
 		<div modal="true" class="easyui-window" title="关联客户窗口" id="customerWindow" collapsible="false" closed="true" minimizable="false" maximizable="false" style="top:20px;left:200px;width: 400px;height: 300px;">
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form id="customerForm" action="../../fixedAreaAction_assignCustomers2FixedArea.action" method="post">
+				<form id="customerForm" action="../../fixedAreaAction_assignCustomersFixedArea.action" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="3">关联客户</td>
@@ -414,11 +426,13 @@
 								<input type="button" value="《《" id="toLeft" onclick="movetoLeft()">
 							</td>
 							<td>
-								<select id="associationSelect" name="customerIds" multiple="multiple" size="10"></select>
+								<select id="associationSelect" name="customerIds" multiple="multiple" size="10">
+								
+								</select>
 							</td>
 						</tr>
 						<tr>
-							<td colspan="3"><a id="associationBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联客户</a> </td>
+							<td colspan="3"><a id="associationBtn" href="javaScript:customerSave()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联客户</a> </td>
 						</tr>
 					</table>
 				</form>

@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.scott.crm.domain.Customer;
@@ -24,7 +26,9 @@ public interface CustomerService {
     @GET
     @Path("/cu")    
     List<Customer>  findByFixedAreaIdIsNotNull();
-    
+    @PUT
+    @Path("/save")
+    void save(@QueryParam("id")Long[] id,@QueryParam("fixedAreaId") String fixedAreaId);
     
 }
   

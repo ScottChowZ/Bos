@@ -46,6 +46,7 @@ public class FixedAreaAction extends CommonAction<FixedArea>{
        fixedAreaService.save(model);
         return SUCCESS;
     }
+    
     @Action("fixedAreaAction_findCustomersNotAssociated")
     public  String findCustomersNotAssociated() throws IOException{
         List<Customer> list = (List<Customer>) WebClient.create(
@@ -69,6 +70,31 @@ public class FixedAreaAction extends CommonAction<FixedArea>{
         
         ServletActionContext.getResponse().getWriter().write(string);
         return null;
+    }
+    private Long[] customerIds;
+    public void setCustomerIds(Long[] customerIds) {
+        this.customerIds = customerIds;
+    }
+    @Action(value="fixedAreaAction_assignCustomersFixedArea",results={@Result(name="success",type="redirect",location="/pages/base/fixed_area.html")})
+    public  String assignCustomersUpdate(){
+        if(customerIds!=null){
+            WebClient.create("http://localhost:8180/CRMA/service/cs/save").accept(MediaType.APPLICATION_JSON)
+            .query("id",customerIds )//
+            .query("fixedAreaId", model.getId())
+            .type(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .put(null);  
+        }else{
+            WebClient.create("http://localhost:8180/CRMA/service/cs/save").accept(MediaType.APPLICATION_JSON)
+            
+            .query("fixedAreaId", model.getId())
+            .type(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .put(null);
+        }
+      
+        
+        return SUCCESS;
     }
 
 }
