@@ -69,10 +69,35 @@
 			function doSubArea(){
 				var rows = $("#grid").datagrid('getSelections');
 			if(rows.length==1){
-				alert("1")
+				$("#sunoassociationSelect").html("")
+		    	$("#suassociationSelect").html("")
+		    	$.post("../../fixedAreaAction_findSubareaIsnull.action",function(result){
+		    		for (var i = 0; i < result.length; i++) {
+		    			$("#sunoassociationSelect").append(
+                                "<option value='"+result[i].id+"'>"
+                                                + result[i].keyWords + "["
+                                                + result[i].assistKeyWords + "]"
+                                                + "</option>")
+					}
+		    	})
+		    	var rows = $("#grid").datagrid('getSelections');
+		    	var str=rows[0].id;
+		    	
+		    	$.post("../../fixedAreaAction_findSubareaNotnull.action",{"id":str},function(result){
+		    		for (var i = 0; i < result.length; i++) {
+		    			$("#suassociationSelect").append(
+                                "<option value='"+result[i].id+"'>"
+                                + result[i].keyWords + "["
+                                + result[i].assistKeyWords + "]"
+                                + "</option>")
+					}
+		    	})
+				
+				$("#subAreaWindow").window('open')
 			}else{
-				alert("2")
+				alert("只能选择一个定区")
 			}
+			
 			}
 			//工具栏
 			var toolbar = [ {
@@ -326,6 +351,22 @@
 				$("#courierFixedAreaId").val(rows[0].id);
 				$("#courierForm").submit();}
 			}
+			function sumovetoRight(){
+				
+				$("#suassociationSelect").append($("#sunoassociationSelect option:selected"))
+				 
+				}
+				function sumovetoLeft(){
+					
+				$("#sunoassociationSelect").append($("#suassociationSelect option:selected"))
+				}
+			function subSave(){
+				var result=	 $("#subAreaForm").form("validate")
+				if(result){
+				var rows = $("#grid").datagrid('getSelections');
+				$("#subAreaFixedAreaId").val(rows[0].id);
+				$("#subAreaForm").submit();}
+			}
 		</script>
 	</head>
 
@@ -416,6 +457,39 @@
 						</tr>
 						<tr>
 							<td colspan="2"><a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a> </td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		<!-- 关联分区窗口 -->
+		<div modal="true" class="easyui-window" title="关联客户窗口" id="subAreaWindow" collapsible="false" closed="true" minimizable="false" maximizable="false" style="top:20px;left:200px;width: 400px;height: 300px;">
+			<div style="overflow:auto;padding:5px;" border="false">
+				<form id="subAreaForm" action="../../fixedAreaAction_savefixareatoSubarea.action" method="post">
+					<table class="table-edit" width="80%" align="center">
+						<tr class="title">
+							<td colspan="3">关联分区</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="hidden" name="id" id="subAreaFixedAreaId" />
+								<select id="sunoassociationSelect" multiple="multiple" size="10">
+								
+								</select>
+							</td>
+							<td>
+								<input type="button" value="》》" id="toRight" onclick="sumovetoRight()">
+								<br/>
+								<input type="button" value="《《" id="toLeft" onclick="sumovetoLeft()">
+							</td>
+							<td>
+								<select id="suassociationSelect" name="subAreaIds" multiple="multiple" size="10">
+								
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3"><a id="associationBtn" href="javaScript:subSave()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联分区</a> </td>
 						</tr>
 					</table>
 				</form>

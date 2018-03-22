@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import com.scott.bos.domain.base.SubArea;
 import com.scott.bos.service.base.SubareaService;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
@@ -76,6 +77,38 @@ public class SubareaAction extends CommonAction<SubArea> {
         
         return null;
     }
+    @Action("fixedAreaAction_findSubareaIsnull")
+    public String findSubareaIsnull() throws Exception{
+        List<SubArea>list=subareaService.findByfixedArea();
+        JsonConfig config = new JsonConfig();
+        config.setExcludes(new String[]{"subareas","fixedArea"});
+        String string = JSONArray.fromObject(list,config).toString();
+        ServletActionContext.getResponse().setContentType("application/json;charset=UTF-8");
+        System.out.println(string);
+        ServletActionContext.getResponse().getWriter().write(string);
+        return null;
+    }
 
+    @Action("fixedAreaAction_findSubareaNotnull")
+    public String findSubareaNotnull() throws Exception{
+        List<SubArea>list=subareaService.findByfixedAreaNotNull(model.getId());
+        JsonConfig config = new JsonConfig();
+        config.setExcludes(new String[]{"subareas","fixedArea"});
+        String string = JSONArray.fromObject(list,config).toString();
+        ServletActionContext.getResponse().setContentType("application/json;charset=UTF-8");
+        System.out.println(string);
+        ServletActionContext.getResponse().getWriter().write(string);
+        return null;
+    }
+    private Long[] subAreaIds;
+    public void setSubAreaIds(Long[] subAreaIds) {
+        this.subAreaIds = subAreaIds;
+    }
+    @Action(value="fixedAreaAction_savefixareatoSubarea",results={@Result(name="success",type="redirect",location="/pages/base/fixed_area.html")})
+    public String  savefixareatoSubarea(){
+        subareaService.savefixareatoSubarea(model.getId(),subAreaIds);
+        
+        return SUCCESS;
+    }
 }
   

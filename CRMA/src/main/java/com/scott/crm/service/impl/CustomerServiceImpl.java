@@ -46,6 +46,27 @@ public class CustomerServiceImpl implements CustomerService{
         }
         
     }
+    @Override
+    public void saveCustomer(Customer customer) {
+        
+        customerDao.save(customer);
+        
+        
+    }
+    @Transactional
+    @Override
+    public void active(String tel) {
+          customerDao.active(tel);
+         
+        
+    }
+    @Override
+    public Customer login(String tel, String password) {
+        
+        
+        return customerDao.login(tel,password);
+    }
+   
 
     
 }

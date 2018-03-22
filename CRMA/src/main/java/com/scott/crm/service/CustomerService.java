@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -29,6 +30,14 @@ public interface CustomerService {
     @PUT
     @Path("/save")
     void save(@QueryParam("id")Long[] id,@QueryParam("fixedAreaId") String fixedAreaId);
-    
+    @POST
+    @Path("/saveCustomer")
+    void saveCustomer(Customer customer);
+    @PUT
+    @Path("/active")
+    void active(@QueryParam("tel")String tel);
+    @GET
+    @Path("/login")
+    Customer login(@QueryParam("tel")String tel ,@QueryParam("password")String password);
 }
   
