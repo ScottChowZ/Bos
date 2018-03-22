@@ -1,5 +1,7 @@
 package com.scott.bos.service.base.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
@@ -40,6 +42,12 @@ public void batchDel(String ids) {
         courierRepository.updateByID(Long.parseLong(string));
     }
     
+}
+@Override
+public List<Courier> findAllCourier() {
+      
+   
+    return courierRepository.findAllCourier();
 }
 
 }

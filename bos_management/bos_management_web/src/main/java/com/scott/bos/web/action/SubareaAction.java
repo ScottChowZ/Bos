@@ -58,7 +58,7 @@ public class SubareaAction extends CommonAction<SubArea> {
     }
     @Action("subareaAction_pageQuery")
     public String pageQuery() throws Exception{
-      /*  Pageable pageable = new PageRequest(page-1, rows);
+        Pageable pageable = new PageRequest(page-1, rows);
         Page<SubArea>page=subareaService.pageQuery(pageable);
         long total = page.getTotalElements();
         List<SubArea> content = page.getContent();
@@ -67,11 +67,11 @@ public class SubareaAction extends CommonAction<SubArea> {
         map.put("rows", content);
         
         JsonConfig config = new JsonConfig();
-        config.setExcludes(new String[]{"fixedArea"} );
+        config.setExcludes(new String[]{"fixedArea","subareas"} );
          String string = JSONObject.fromObject(map, config).toString();
          ServletActionContext.getResponse().setContentType("application/json;charset=UTF-8");
           ServletActionContext.getResponse().getWriter().write(string);
-          */
+          
         
         
         return null;

@@ -25,7 +25,7 @@ public interface CustomerService {
    List<Customer>  findByFixedAreaIdIsNull();
     @GET
     @Path("/cu")    
-    List<Customer>  findByFixedAreaIdIsNotNull();
+    List<Customer>  findByFixedAreaId(@QueryParam("fixedAreaId") String fixedAreaId);
     @PUT
     @Path("/save")
     void save(@QueryParam("id")Long[] id,@QueryParam("fixedAreaId") String fixedAreaId);

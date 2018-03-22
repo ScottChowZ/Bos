@@ -1,5 +1,8 @@
 package com.scott.bos.service.base;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.scott.bos.domain.base.FixedArea;
 
 /**  
@@ -10,6 +13,10 @@ import com.scott.bos.domain.base.FixedArea;
 public interface FixedAreaService {
 
     void save(FixedArea model);
+
+    Page<FixedArea> findFixedArea(Pageable pageable);
+
+    void saveCourierToFixed(Long courierId, Long taketimeId, Long id);
 
 }
   

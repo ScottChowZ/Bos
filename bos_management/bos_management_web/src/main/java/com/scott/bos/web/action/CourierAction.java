@@ -1,5 +1,6 @@
 package com.scott.bos.web.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,7 @@ import com.scott.bos.domain.base.Courier;
 import com.scott.bos.domain.base.Standard;
 import com.scott.bos.service.base.CourierService;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
@@ -144,8 +146,16 @@ public class CourierAction extends CommonAction<Courier> {
        courierService.batchDel(ids);
         return SUCCESS;
     }
-
-      
+     @Action("courierAction_listajax")
+     public String listAjax() throws Exception{
+        List<Courier>list =courierService.findAllCourier();
+        JsonConfig config = new JsonConfig();
+        config.setExcludes(new String[]{"fixedAreas"});
+        String string = JSONArray.fromObject(list,config).toString();
+        ServletActionContext.getResponse().setContentType("application/json;charset=UTF-8");
+        ServletActionContext.getResponse().getWriter().write(string);
+       return null;  
+     }
 
 }
   

@@ -47,7 +47,10 @@
 	                                                + "</option>")
 						}
 			    	})
-			    	$.post("../../fixedAreaAction_findCustomersAssociated.action",function(result){
+			    	var rows = $("#grid").datagrid('getSelections');
+			    	var str=rows[0].id;
+			    	
+			    	$.post("../../fixedAreaAction_findCustomersAssociated.action",{"id":str},function(result){
 			    		for (var i = 0; i < result.length; i++) {
 			    			$("#associationSelect").append(
 	                                "<option value='"+result[i].id+"'>"
@@ -63,7 +66,14 @@
 				
 				
 			}
-			
+			function doSubArea(){
+				var rows = $("#grid").datagrid('getSelections');
+			if(rows.length==1){
+				alert("1")
+			}else{
+				alert("2")
+			}
+			}
 			//工具栏
 			var toolbar = [ {
 				id : 'button-search',	
@@ -110,7 +120,7 @@
 				id : 'button-association2',
 				text : '关联分区',
 				iconCls : 'icon-sum',
-				handler : doAssociations
+				handler : doSubArea
 			}];
 			// 定义列
 			var columns = [ [ {
@@ -155,7 +165,7 @@
 					pageList: [30,50,100],
 					pagination : true,
 					toolbar : toolbar,
-					url : "../../data/fixedarea_subarea.json",
+					url : "../../fixedAreaAction_findFixedArea.action",
 					idField : 'id',
 					columns : columns,
 					onDblClickRow : doDblClickRow
@@ -309,6 +319,13 @@
 				 
 				
 			}
+			function Courier() {
+				var result=	 $("#courierForm").form("validate")
+				if(result){
+				var rows = $("#grid").datagrid('getSelections');
+				$("#courierFixedAreaId").val(rows[0].id);
+				$("#courierForm").submit();}
+			}
 		</script>
 	</head>
 
@@ -454,24 +471,21 @@
 							<td>
 								<!-- 存放定区编号 -->
 								<input type="hidden" name="id" id="courierFixedAreaId" />
-								<input data-options="ditable:false, url:'../../data/fixed_ared.json',valueField:'id',textField:'name'"
+								<input data-options="ditable:false, url:'../../courierAction_listajax.action',valueField:'id',textField:'name'"
 									 type="text" name="courierId" class="easyui-combobox" required="true" />
 							</td>
 						</tr>
 						<tr>
 							<td>选择收派时间</td>
 							<td>
-								<select required="true" class="easyui-combobox" name="takeTimeId">
-									<option>请选择</option>
-									<option value="1">北京早班</option>
-									<option value="2">北京晚班</option>
-								</select>
+								<input data-options="ditable:false, url:'../../takeTimeAction_findTime.action',valueField:'id',textField:'name'"
+									 type="text" name="taketimeId" class="easyui-combobox" required="true" />
 								<!-- <input type="text" name="takeTimeId" class="easyui-combobox" required="true" /> -->
 							</td>
 						</tr>
 						<tr>
 							<td colspan="3">
-								<a id="associationCourierBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联快递员</a>
+								<a id="associationCourierBtn" href="JavaScript:Courier()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">关联快递员</a>
 							 </td>
 						</tr>
 					</table>

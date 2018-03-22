@@ -27,20 +27,20 @@ public class CustomerServiceImpl implements CustomerService{
         return customerDao.findByFixedAreaIdIsNull();
     }
     @Override
-    public List<Customer> findByFixedAreaIdIsNotNull() {
+    public List<Customer> findByFixedAreaId(String fixedAreaId) {
           
          
-        return customerDao.findByFixedAreaIdIsNotNull();
+        return customerDao.findByFixedAreaId(fixedAreaId);
     }
     @Transactional
     @Override
     public void save(Long[] id, String fixedAreaId) {
           customerDao.relive(fixedAreaId);
-          System.out.println("w");
+          
          
          
         for(int i=0;i<id.length;i++){
-            System.out.println("e");
+            
             customerDao.relevance(id[i],fixedAreaId);
                     
         }

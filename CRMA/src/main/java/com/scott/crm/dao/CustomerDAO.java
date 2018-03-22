@@ -18,8 +18,9 @@ import com.scott.crm.domain.Customer;
 public interface CustomerDAO extends JpaRepository<Customer, Long> {
 
     List<Customer> findByFixedAreaIdIsNull();
-
-    List<Customer> findByFixedAreaIdIsNotNull();
+    @Modifying
+    @Query("from Customer where fixedAreaId=?")
+    List<Customer> findByFixedAreaId(String fixedAreaId);
     @Modifying
     @Query("update Customer set fixedAreaId=null where fixedAreaId=?")
     void relive(String Id);
