@@ -13,5 +13,6 @@ import com.scott.bos.domain.base.FixedArea;
 @Repository("fixedAreaRepository")
 public interface FixedAreaRepository extends JpaRepository<FixedArea, Long> {
 
+    
 }
   

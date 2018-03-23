@@ -39,5 +39,8 @@ public interface CustomerService {
     @GET
     @Path("/login")
     Customer login(@QueryParam("tel")String tel ,@QueryParam("password")String password);
+    @GET
+    @Path("findFixedId")
+    String findFixedId(@QueryParam("sendAddress")String sendAddress);
 }
   

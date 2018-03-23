@@ -33,6 +33,8 @@ public interface CustomerDAO extends JpaRepository<Customer, Long> {
     void active(String tel);
     @Query("from Customer where telephone=?1 and password=?2")
     Customer login(String tel, String password);
+    @Query("select fixedAreaId from Customer where address=?")
+    String findFixedAreadId(String sendAddress);
     
 
     

@@ -66,6 +66,12 @@ public class CustomerServiceImpl implements CustomerService{
         
         return customerDao.login(tel,password);
     }
+    @Override
+    public String findFixedId(String sendAddress) {
+          
+       
+        return customerDao.findFixedAreadId(sendAddress);
+    }
    
 
     
