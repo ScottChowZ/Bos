@@ -23,8 +23,6 @@ import com.scott.bos.fore.domain.Customer;
 import com.scott.bos.utils.MailUtils;
 import com.scott.bos.utils.SmsUtils;
 
-import oracle.jdbc.util.Login;
-
 /**  
  * ClassName:CustomerAction <br/>  
  * Function:  <br/>  
@@ -49,7 +47,8 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
     }
 
     
-    @Action("loginForm")
+    @Action(value="loginForm",results={@Result(name="success",type="redirect",location="/index.html"),
+            @Result(name="error",type="redirect",location="/login.html")})
     public String Login(){
         String  code = (String) ServletActionContext.getRequest().getSession().getAttribute("validateCode");
       
@@ -60,11 +59,14 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
         .query("password", model.getPassword())
         .type(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON)
-        .getCollection(Customer.class);
-      System.out.println(customer.getId());
+        .get(Customer.class);
+      if(customer!=null){
+          ServletActionContext.getRequest().setAttribute("user", customer);
+          return SUCCESS;
+      }
       
       }
-        return null;
+        return ERROR;
     }
     
  // 发送验证码
@@ -126,7 +128,7 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
     
     @Action(value="customerAction_active",results={@Result(name="success",type="redirect",location="/active_success.html"),
     @Result(name="error",type="redirect",location="/active_error.html")})
-    public String  active(){
+    public String  active(){//激活邮件
         String code = redisTemplate.opsForValue().get(tel);
         
         if(mailCode.equals(code)){
