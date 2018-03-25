@@ -18,31 +18,49 @@
 			var editIndex ;
 			
 			function doAdd(){
-				if(editIndex != undefined){
-					$("#grid").datagrid('endEdit',editIndex);
-				}
-				if(editIndex==undefined){
-					//alert("快速添加电子单...");
-					$("#grid").datagrid('insertRow',{
-						index : 0,
-						row : {}
-					});
-					$("#grid").datagrid('beginEdit',0);
-					editIndex = 0;
-				}
+			
+				
+				// 在第二行的位置插入一个新行
+				 $('#grid').datagrid('insertRow',{
+					index: 1,	// 索引从0开始
+					row: {
+						 /* name: '新名称',
+						age: 30,
+						note: '新消息'  */
+					}
+				});
+				 $("#grid").datagrid('beginEdit',0);
+				 editIndex = 0;
 			}
 			
 			function doSave(){
-				$("#grid").datagrid('endEdit',editIndex );
+				var rows=$("#grid").datagrid('getSelections');
+				
+				var index	=$("#grid").datagrid('getRowIndex',rows[0]);
+				
+				$("#grid").datagrid('endEdit',index);
+				$.post("",function(result){})
 			}
 			
-			function doCancel(){
-				if(editIndex!=undefined){
-					$("#grid").datagrid('cancelEdit',editIndex);
-					if($('#grid').datagrid('getRows')[editIndex].id == undefined){
-						$("#grid").datagrid('deleteRow',editIndex);
-					}
-					editIndex = undefined;
+			function doCancel(){//删除
+				
+				
+			var rows=$("#grid").datagrid('getSelections');
+				if(rows.length==1){
+				var index	=$("#grid").datagrid('getRowIndex',rows[0]);
+				$("#grid").datagrid('deleteRow',index);
+				}else{
+					$.messager.alert("警告","一次只能删除一行","warning")
+				}
+			}
+			function doEdit(){
+				var rows=$("#grid").datagrid('getSelections');
+				if(rows.length==1){
+				var index	=$("#grid").datagrid('getRowIndex',rows[0]);
+				
+				$("#grid").datagrid('beginEdit',index);}
+				else{
+					$.messager.alert("警告", "一次只能编辑一行","warning")
 				}
 			}
 			
@@ -50,23 +68,32 @@
 			var toolbar = [ {
 				id : 'button-add',	
 				text : '新增一行',
-				iconCls : 'icon-edit',
+				iconCls : 'icon-add',
 				handler : doAdd
 			}, {
+				id : 'button-edit',
+				text : '修改',
+				iconCls : 'icon-edit',
+				handler : doEdit
+			}, {
 				id : 'button-cancel',
-				text : '取消编辑',
+				text : '删除',
 				iconCls : 'icon-cancel',
 				handler : doCancel
-			}, {
+			},{
 				id : 'button-save',
 				text : '保存',
 				iconCls : 'icon-save',
 				handler : doSave
 			}];
 			// 定义列
-			var columns = [ [ {
-				field : 'id',
-				title : '工作单号',
+			var columns = [ [{// 指定列
+				field : 'cb',
+				title : 'cb',
+				checkbox : true
+			},{
+				field : 'wayBillNum',
+				title : '运单号',
 				width : 120,
 				align : 'center',
 				editor :{
@@ -76,7 +103,7 @@
 					}
 				}
 			}, {
-				field : 'arrivecity',
+				field : 'recAddress',
 				title : '到达地',
 				width : 120,
 				align : 'center',
@@ -87,7 +114,7 @@
 					}
 				}
 			},{
-				field : 'product',
+				field : 'goodsType',
 				title : '产品',
 				width : 120,
 				align : 'center',
@@ -98,7 +125,7 @@
 					}
 				}
 			}, {
-				field : 'num',
+				field : 'feeitemnum',
 				title : '件数',
 				width : 120,
 				align : 'center',
@@ -109,7 +136,7 @@
 					}
 				}
 			}, {
-				field : 'weight',
+				field : 'actlweit',
 				title : '重量',
 				width : 120,
 				align : 'center',
@@ -151,8 +178,9 @@
 					columns : columns,
 					onDblClickRow : doDblClickRow,
 					onAfterEdit : function(rowIndex, rowData, changes){
-						console.info(rowData);
-						editIndex = undefined;
+						$.post("../../waybillAction_save.action",rowData,function(result){})
+						/* console.info(rowData);
+						editIndex = undefined; */
 					}
 				});
 			});

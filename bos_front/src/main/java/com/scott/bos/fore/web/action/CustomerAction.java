@@ -83,7 +83,7 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
         final String code = RandomStringUtils.randomNumeric(6);//数字表示几位数
         ServletActionContext.getRequest().getSession().setAttribute("code", code);
         ServletActionContext.getRequest().getSession().setAttribute("tel", model.getTelephone());
-        System.out.println("~~"+model.getTelephone());
+        
         jmsTemplate.send("sms", new MessageCreator() {
             
             @Override
