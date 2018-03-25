@@ -6,8 +6,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.scott</groupId>
-  <artifactId>bos_managment_utils</artifactId>
+  <artifactId>middleware</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <description>管理工具类</description>
-
+  <packaging>war</packaging>
 </project>

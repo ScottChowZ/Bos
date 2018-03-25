@@ -2,6 +2,10 @@ package com.scott.bos.fore.web.action;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.Session;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -14,6 +18,8 @@ import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Controller;
 
 import com.aliyuncs.exceptions.ClientException;
@@ -37,6 +43,8 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
     private Customer model;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private JmsTemplate jmsTemplate;
     @Override
     public Customer getModel() {
           if(model==null){
@@ -72,49 +80,67 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
  // 发送验证码
     @Action(value = "customerAction_sendSMS")
     public String sendSMS() {
-       String code = RandomStringUtils.randomNumeric(6);//数字表示几位数
-       ServletActionContext.getRequest().getSession().setAttribute("code", code);
-       ServletActionContext.getRequest().getSession().setAttribute("tel", model.getTelephone());
-       try {
-           System.out.println(model.getTelephone());
+        final String code = RandomStringUtils.randomNumeric(6);//数字表示几位数
+        ServletActionContext.getRequest().getSession().setAttribute("code", code);
+        ServletActionContext.getRequest().getSession().setAttribute("tel", model.getTelephone());
+        System.out.println("~~"+model.getTelephone());
+        jmsTemplate.send("sms", new MessageCreator() {
+            
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                                     MapMessage message = session.createMapMessage();
+                                     message.setString("seCode", code);
+                                     message.setString("tel", model.getTelephone());
+                               
+                return message;
+            }
+        });
+      
+      /* try {
+           
         SmsUtils.sendSms("16675181252", code);
     } catch (ClientException e) {
           
          
         e.printStackTrace();  
         
-    }
+    }*/
         return null;
     }
+    
     private String checkcode;
     public void setCheckcode(String checkcode) {
         this.checkcode = checkcode;
     }
     @Action("customerAction_regist")
     public String regist(){//注册
-      /*  String code = (String) ServletActionContext.getRequest().getSession().getAttribute("code");
+        String code = (String) ServletActionContext.getRequest().getSession().getAttribute("code");
         String tel= (String) ServletActionContext.getRequest().getSession().getAttribute("tel");
        if(checkcode!=null&&code.equals(checkcode)&&model.getTelephone().equals(tel)){
+          String mailcode = RandomStringUtils.randomNumeric(6);
+           
+           redisTemplate.opsForValue().set(model.getTelephone(), mailcode, 1, TimeUnit.DAYS);//将验证码放入redis
+          
+            String emailBody="感谢您注册网址:<a href='http://localhost:8280/bos_front/customerAction_active.action?tel="+model.getTelephone()+"&mailCode="+mailcode+"'>激活</a>";
+            MailUtils.sendMail("激活邮件", emailBody, "1014261476@qq.com");
            WebClient.create("http://localhost:8180/CRMA/service/cs/saveCustomer")
            .type(MediaType.APPLICATION_JSON)
            .accept(MediaType.APPLICATION_JSON)
            .post(model);
            
+           
            return null;
-       }*/
-      String mailcode = RandomStringUtils.randomNumeric(6);
-      System.out.println(mailcode);
-       redisTemplate.opsForValue().set(model.getTelephone(), mailcode, 1, TimeUnit.DAYS);//将验证码放入redis
+       }
       
-        String emailBody="感谢您注册网址:<a href='http://localhost:8280/bos_front/customerAction_active.action?tel="+model.getTelephone()+"&mailCode="+mailcode+"'>激活</a>";
         //key为电话值为邮件码
-        System.out.println(emailBody);
-       MailUtils.sendMail(model.getEmail(), "激活邮件", emailBody);//邮件地址,主题,内容
-        WebClient.create("http://localhost:8180/CRMA/service/cs/saveCustomer")
+        
+      // MailUtils.sendMail(model.getEmail(), "激活邮件", emailBody);//邮件地址,主题,内容
+       
+        /*WebClient.create("http://localhost:8180/CRMA/service/cs/saveCustomer")
         .type(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON)
         .post(model);
-        
+        */
         return null;
     }
     private String tel;
