@@ -28,6 +28,64 @@
               http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd "> -->
 
 
+	<!--
+		工厂bean,初始化shiro框架提供的filter
+	-->
+	<bean id="shiroFilterFactoryBean" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- 注入安全管理器 -->
+		<property name="securityManager" ref="securityManager"></property>
+
+		<!-- 登录页面的url,认证的页面 -->
+		<property name="loginUrl" value="/login.html"></property>
+		<!-- 认证成功以后跳转的页面 -->
+		<property name="successUrl" value="/index.html"></property>
+		<!-- 权限不足的时候,跳转的页面 -->
+		<property name="unauthorizedUrl" value="/unauthorized.html"></property>
+		<!-- 指定拦截规则 -->
+		<property name="filterChainDefinitions">
+			<!--
+				authc : 框架提供的一个拦截器,必须认证通过,认证通过就可以访问,认证失败,无法访问
+				anon : 框架提供的一个拦截器,可以匿名访问
+				拦截器执行的时候是从上往下执行的,一旦有一个匹配成功执行了,后面的规则不再会被执行
+				规则不可以折行 !!!!
+			-->
+			<value>
+				/css/* = anon
+				/data/* = anon
+				/images/* = anon
+				/js/** = anon
+				/validatecode.jsp* = anon
+				/userAction_login.action=anon
+				/hi.html=perms["xx"]
+				/** = authc
+			</value>
+		</property>
+	</bean>
+	<!-- 注册安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+	<property name="realm" ref="userRealm"/>
+	</bean>
+
+<tx:annotation-driven proxy-target-class="true"
+		transaction-manager="transactionManager" />
+
+	<!-- 基于Spring自动代理的方式,为Service层的对象创建代理对象 -->
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+		<!-- 开启cglib代理 -->
+		<property name="proxyTargetClass" value="true"></property>
+	</bean>
+
+	<!--
+		配置切面 = 切点 + 通知
+		切点 : 向那里插入代码
+		通知 : 要插入的代码
+	-->
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager"></property>
+	</bean>
+
 
 	<!--
 		#########################################################
@@ -91,6 +149,7 @@
 		#########################################################
 	-->
 	<jpa:repositories base-package="com.scott.bos.dao" />
+	
 	<!--发布订单的WebService -->
 	<jaxrs:server address="/orderService">
 		<jaxrs:serviceBeans>
