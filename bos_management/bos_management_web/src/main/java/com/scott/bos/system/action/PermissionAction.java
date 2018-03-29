@@ -24,6 +24,7 @@ import com.opensymphony.xwork2.ModelDriven;
 import com.scott.bos.domain.system.Permission;
 import com.scott.bos.service.menu.PermissionService;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
@@ -81,6 +82,18 @@ public class PermissionAction extends ActionSupport implements ModelDriven<Permi
         //System.out.println(model.getName());
         permissionService.save(model);
         return SUCCESS;
+    }
+   @Action("permissionAction_findAll")
+    public String findAll() throws Exception{
+       Page<Permission> page=permissionService.pageQuery(null);
+       List<Permission> list = page.getContent();
+       JsonConfig config = new JsonConfig();
+       config.setExcludes(new String[]{"roles"});
+       String string = JSONArray.fromObject(list,config).toString();
+       ServletActionContext.getResponse().setContentType("application/json;charset=UTF-8");
+       ServletActionContext.getResponse().getWriter().write(string);
+       
+        return null;
     }
 }
   
