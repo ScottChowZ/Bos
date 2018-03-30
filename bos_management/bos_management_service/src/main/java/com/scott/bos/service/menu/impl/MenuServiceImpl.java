@@ -5,12 +5,15 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.annotation.Resources;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.scott.bos.dao.base.MenuRepository;
 import com.scott.bos.domain.system.Menu;
+import com.scott.bos.domain.system.User;
 import com.scott.bos.service.menu.MenuService;
 
 /**  
@@ -42,6 +45,13 @@ public class MenuServiceImpl implements MenuService {
         
          
         return  menuRepository.findAll(pageable);
+    }
+    @Override
+    public List<Menu> findMenu() {
+        Subject subject = SecurityUtils.getSubject();  
+        User user = (User) subject.getPrincipal();
+        
+        return menuRepository.findMenu(user.getId());
     }
 
 }

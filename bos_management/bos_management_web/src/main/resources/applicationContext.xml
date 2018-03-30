@@ -64,7 +64,15 @@
 	<!-- 注册安全管理器 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 	<property name="realm" ref="userRealm"/>
+	<property name="cacheManager" ref="cacheManager" />
 	</bean>
+		<!-- 注册缓存管理器 -->
+	<bean id="cacheManager"
+		class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<!-- 指定配置文件的位置 -->
+		<property name="cacheManagerConfigFile" value="classpath:ehcache.xml"></property>
+	</bean>
+	
 
 <tx:annotation-driven proxy-target-class="true"
 		transaction-manager="transactionManager" />

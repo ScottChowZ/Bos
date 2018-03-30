@@ -17,6 +17,8 @@ import com.scott.bos.domain.system.Menu;
 public interface MenuRepository extends JpaRepository<Menu, Long>{
 
     List<Menu> findByParentMenuIsNull();
+    @Query("select m from Menu m join m.roles r join r.users u where u.id=? and m.parentMenu=null ")
+    List<Menu> findMenu(Long id);
 
    
 

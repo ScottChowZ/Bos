@@ -90,5 +90,15 @@ public class MenuAction extends ActionSupport implements ModelDriven<Menu>{
         
         return null;
     }
+    @Action("menuAction_findMenu")
+    public String findMenu() throws Exception{
+        List<Menu>list=menuService.findMenu();
+        JsonConfig config = new JsonConfig();
+        config.setExcludes(new String[]{"parentMenu","roles","childrenMenus"});
+        String string = JSONArray.fromObject(list,config).toString();
+        ServletActionContext.getResponse().setContentType("application/json;charset=UTF-8");
+        ServletActionContext.getResponse().getWriter().write(string);
+        return null;
+    }
 }
   

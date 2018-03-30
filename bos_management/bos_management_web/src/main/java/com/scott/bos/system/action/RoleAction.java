@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
+import com.scott.bos.domain.system.Menu;
 import com.scott.bos.domain.system.Role;
 import com.scott.bos.service.menu.RoleService;
 
@@ -88,8 +89,19 @@ public String pageQuery() throws Exception{
         ServletActionContext.getResponse().getWriter().write(string);
        return null;
    }
+   private String menuIds;
+   public void setMenuIds(String menuIds) {
+    this.menuIds = menuIds;
+}
    @Action(value="roleAction_save",results={@Result(name="success",type="redirect",location="/pages/system/role.html")})
    public String save(){
+       String[] split = menuIds.split(",");
+       for (String string : split) {
+            Menu menu = new Menu();
+            menu.setId(Long.parseLong(string));
+            model.getMenus().add(menu);
+        
+    }
        roleService.save(model);
        
        return SUCCESS;
