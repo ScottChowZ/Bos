@@ -56,7 +56,7 @@
 				/js/** = anon
 				/validatecode.jsp* = anon
 				/userAction_login.action=anon
-				/hi.html=perms["xx"]
+				/pages/base/*=perms["base"]
 				/** = authc
 			</value>
 		</property>

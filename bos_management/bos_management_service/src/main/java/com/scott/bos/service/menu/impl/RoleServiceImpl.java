@@ -1,5 +1,7 @@
 package com.scott.bos.service.menu.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.scott.bos.dao.base.RoleRepository;
 import com.scott.bos.domain.system.Role;
+import com.scott.bos.domain.system.User;
 import com.scott.bos.service.menu.RoleService;
 
 /**  
@@ -30,6 +33,18 @@ public class RoleServiceImpl implements RoleService {
           
         roleRepository.save(model);
         
+    }
+    @Override
+    public Page<Role> findAll(Pageable pageable) {
+          
+        
+        return roleRepository.findAll(pageable);
+    }
+    @Override
+    public List<Role> findRole(User user) {
+         
+        
+        return  roleRepository.findRole(user.getId());
     }
 
 }

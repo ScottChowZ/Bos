@@ -10,6 +10,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
@@ -129,7 +130,7 @@ public String pageQuery() throws IOException{
        
        return SUCCESS;
    }
-    //@RequiresPermissions("ee")
+    
     @Action(value="te",results={@Result(name="success",type="redirect",location="/index.html")})
     public String te(){
         

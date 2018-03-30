@@ -1,5 +1,7 @@
 package com.scott.bos.service.menu.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.scott.bos.dao.base.PermissionRepository;
 import com.scott.bos.domain.system.Permission;
+import com.scott.bos.domain.system.User;
 import com.scott.bos.service.menu.PermissionService;
 
 /**  
@@ -30,6 +33,12 @@ public class PermissionServiceImpl implements PermissionService {
           
         permissionRepository.save(model);
         
+    }
+    @Override
+    public List<Permission> findPermission(User user) {
+            
+        
+        return permissionRepository.findPermission(user.getId());
     }
 
 }
