@@ -35,6 +35,12 @@
 				    action:"../../areaAction_importXLS.action"
 				})
 			}
+			function doExport(){
+				
+				    // 请求地址
+				window.location.href="../../areaAction_exportExcel.action"
+				
+			}
 			
 			//工具栏
 			var toolbar = [ {
@@ -57,6 +63,12 @@
 				text : '导入',
 				iconCls : 'icon-redo',
 				handler : doImport
+			
+			}, {
+				id : 'button-xport',
+				text : '导出',
+				iconCls : 'icon-redo',
+				handler : doExport
 			}];
 			// 定义列
 			var columns = [ [ {

@@ -15,5 +15,6 @@ import com.scott.bos.domain.take_delivery.WorkBill;
 @Repository("workbillRepository")
 public interface WorkbillRepository extends JpaRepository<WorkBill, Long>{
 
+    
 }
   

@@ -8,8 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -27,9 +32,9 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 import com.scott.bos.domain.base.Area;
 import com.scott.bos.service.base.AreaService;
+import com.scott.bos.utils.FileDownloadUtils;
 import com.scott.bos.utils.PinYin4jUtils;
 
-import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -107,11 +112,57 @@ public void setAreaFile(File areaFile) {
         // TODO Auto-generated catch block  
         e.printStackTrace();  
         
-    } 
-        
-        
+    }                
         return null;
         
+    }
+    
+    @Action("areaAction_exportExcel")
+    public String exportExcel() throws Exception{
+        Page<Area> pageQuery = areaService.pageQuery(null);
+        List<Area> list = pageQuery.getContent();
+       
+        HSSFWorkbook workbook = new HSSFWorkbook();//创建文件
+          HSSFSheet sheet = workbook.createSheet();//创建工作簿
+          HSSFRow row = sheet.createRow(0);//创建第一行
+          
+          row.createCell(0).setCellValue("省");//创建头列并赋值
+          row.createCell(1).setCellValue("市");
+          row.createCell(2).setCellValue("区");
+          row.createCell(3).setCellValue("邮编");
+          row.createCell(4).setCellValue("简码");
+          row.createCell(5).setCellValue("城市编码");
+          for (Area area : list) {//创建数据列
+              int lastRowNum = sheet.getLastRowNum();
+              HSSFRow createRow = sheet.createRow(lastRowNum+1);
+              createRow.createCell(0).setCellValue(area.getProvince());
+              createRow.createCell(1).setCellValue(area.getCity());
+              createRow.createCell(2).setCellValue(area.getDistrict());
+              createRow.createCell(3).setCellValue(area.getPostcode());
+              createRow.createCell(4).setCellValue(area.getShortcode());
+              createRow.createCell(5).setCellValue(area.getCitycode());
+          }
+        //--------------------------------------两头一流
+        
+          
+          String filename="区域数据统计.xls";
+        HttpServletResponse response = ServletActionContext.getResponse();
+        ServletOutputStream outputStream = response.getOutputStream();//输出流
+        HttpServletRequest request = ServletActionContext.getRequest();
+        String header = request.getHeader("User-Agent");//一头,获取浏览器的类型
+        
+        ServletContext servletContext = ServletActionContext.getServletContext();
+        // 先获取mimeType再重新编码,避免编码后后缀名丢失,导致获取失败
+        String mimeType = servletContext.getMimeType(filename);//二头,获取mimeType
+        
+        filename = FileDownloadUtils.encodeDownloadFilename(filename, header);// 对文件名重新编码,不从新编码,文件没名,格式也不对
+
+        response.setContentType(mimeType);//设置信息头
+        response.setHeader("Content-Disposition","attachment; filename=" + filename);
+        
+           workbook.write(outputStream);//将文件写出去
+           workbook.close();
+        return null;
     }
     private int page;
     private int rows;
