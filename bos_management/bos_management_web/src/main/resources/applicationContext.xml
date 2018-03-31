@@ -96,8 +96,11 @@
 				/js/** = anon
 				/validatecode.jsp* = anon
 				/userAction_login.action=anon
+				
 				/pages/base/*=perms["base"]
+				
 				/** = authc
+				
 			</value>
 		</property>
 	</bean>

@@ -103,14 +103,7 @@ public class UserAction extends ActionSupport implements ModelDriven<User>{
         
         return SUCCESS;
     }
- /*   private int page ;
-    private int rows;
-   public void setPage(int page) {
-    this.page = page;
-}
-   public void setRows(int rows) {
-    this.rows = rows;
-}*/
+
    @Action("userAction_pageQuery")
 public String pageQuery() throws IOException{
     //Pageable pageable=new PageRequest(0, 30);

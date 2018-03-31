@@ -46,11 +46,13 @@ public class UserRealm extends AuthorizingRealm {
           if("admin".equals(user.getUsername())){
               Page<Permission> pageQuery = permissionService.pageQuery(null);
               List<Permission> list2 = pageQuery.getContent();
+              info.addStringPermission("admin");
               for (Permission permission : list2) {
                 info.addStringPermission(permission.getKeyword());
             }
           Page<Role>page =roleService.findAll(null);
-           List<Role> list = page.getContent();                  
+           List<Role> list = page.getContent(); 
+           
            for (Role role : list) {              
                info.addRole(role.getKeyword());             
         }
@@ -59,7 +61,7 @@ public class UserRealm extends AuthorizingRealm {
               List<Role>list =roleService.findRole(user);
               
               for (Role role : list) {
-                  //System.out.println(role.getKeyword());
+                  
                 info.addRole("base");
             }
               List<Permission> lis= permissionService.findPermission(user);
@@ -69,9 +71,7 @@ public class UserRealm extends AuthorizingRealm {
               
           }
          
-           /* info.addStringPermission("ee");
-            info.addStringPermission("courier_pageQuery");
-            info.addRole("admin");*/
+           
         return info;
     }
 
