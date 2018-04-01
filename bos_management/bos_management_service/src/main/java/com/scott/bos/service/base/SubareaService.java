@@ -24,6 +24,8 @@ public interface SubareaService {
 
     void savefixareatoSubarea(Long id, Long[] subAreaIds);
 
+    List<SubArea> findSubByfixed(Long id);
+
    
 
 }

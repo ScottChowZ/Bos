@@ -107,8 +107,19 @@ public class SubareaAction extends CommonAction<SubArea> {
     @Action(value="fixedAreaAction_savefixareatoSubarea",results={@Result(name="success",type="redirect",location="/pages/base/fixed_area.html")})
     public String  savefixareatoSubarea(){
         subareaService.savefixareatoSubarea(model.getId(),subAreaIds);
-        
+        System.out.println("22");
         return SUCCESS;
+    }
+    @Action("SubareaAction_findSubByfixed")
+    public String findSubByfixed() throws Exception{
+      List<SubArea>list =subareaService.findSubByfixed(model.getId());
+      JsonConfig config = new JsonConfig();
+      config.setExcludes(new String[]{"subareas","fixedArea"});
+      String string = JSONArray.fromObject(list,config).toString();
+      ServletActionContext.getResponse().setContentType("application/json;charset=UTF-8");
+      ServletActionContext.getResponse().getWriter().write(string);
+        
+       return  null;
     }
 }
   

@@ -1,8 +1,8 @@
 package com.scott.bos.web.action;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -53,8 +53,8 @@ public class ImageAction extends ActionSupport {
        
             FileUtils.copyFile(imgFile, file);//将旧文件考到新文件
             
-          //----------------------------------  
-            String path = servletContext.getContextPath();
+          //----------------------------------  在网页上显示
+            String path = servletContext.getContextPath();//获得本项目路径
             Map<String, Object> map = new HashMap<>();
             map.put("error", 0);
             

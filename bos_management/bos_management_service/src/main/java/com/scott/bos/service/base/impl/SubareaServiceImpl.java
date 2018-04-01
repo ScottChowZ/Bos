@@ -61,6 +61,12 @@ public class SubareaServiceImpl implements SubareaService {
         }
         
     }
+    @Override
+    public List<SubArea> findSubByfixed(Long id) {
+        FixedArea fixedArea = fixedAreaRepository.findOne(id);
+        
+        return subareaRepository.findSubByfixed(fixedArea);
+    }
 
     
     

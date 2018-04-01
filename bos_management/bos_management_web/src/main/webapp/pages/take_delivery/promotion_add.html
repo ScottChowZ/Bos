@@ -28,6 +28,19 @@
 		                    allowFileManager : true
 		        });
 			});
+				
+				 KindEditor.ready(function(K) {
+						window.editor = K.create('#description', {
+							// 指定处理文件上传的Action地址
+							uploadJson : "../../imageAction_upload.action",
+							// 开启图片空间
+							allowFileManager : true,
+							// 指定处理图片空间的Action地址
+							fileManagerJson : "../../imageAction_manager.action"
+						});
+					});
+
+				
 			});
 		</script>
 	</head>

@@ -27,6 +27,9 @@ public interface SubareaRepository extends JpaRepository<SubArea, Long> {
     @Modifying
     @Query("update SubArea set fixedArea=?1 where id=?2")
     void savefixareatoSubarea(FixedArea fixedArea, Long subAreaId);
+    
+    @Query("from SubArea where fixedArea = ?")
+    List<SubArea> findSubByfixed( FixedArea fixedArea);
 
 }
   
